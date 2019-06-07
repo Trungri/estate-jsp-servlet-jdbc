@@ -10,11 +10,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Map;
 
-import com.estate.repository.GenericJDBC;
 import com.estate.annotation.Column;
 import com.estate.annotation.Table;
 import com.estate.mapper.ResultSetMapper;
+import com.estate.paging.Pageble;
+import com.estate.paging.Sorter;
+import com.estate.repository.GenericJDBC;
 
 public class AbstractJDBC<T> implements GenericJDBC<T> {
 
@@ -41,6 +44,7 @@ public class AbstractJDBC<T> implements GenericJDBC<T> {
 		return null;
 	}
 
+	/*
 	@Override
 	public List<T> query(String sql, Object... parameters) {
 		ResultSetMapper<T> resultSetMapper = new ResultSetMapper<>();
@@ -49,10 +53,6 @@ public class AbstractJDBC<T> implements GenericJDBC<T> {
 				ResultSet resultSet = statement.executeQuery()) {
 			// set parameters to statement
 			if (conn != null) {
-				for (int i = 0; i < parameters.length; i++) {
-					int index = i + 1;
-					statement.setObject(index, parameters[i]);
-				}
 				return resultSetMapper.mapRow(resultSet, this.zClass);
 			}
 		} catch (SQLException ex) {
@@ -151,7 +151,7 @@ public class AbstractJDBC<T> implements GenericJDBC<T> {
 		}
 		return null;
 	}
-
+	 */
 	@Override
 	public Long insert(Object object) {
 		Connection conn = null;
@@ -278,7 +278,7 @@ public class AbstractJDBC<T> implements GenericJDBC<T> {
 			if (conn != null) {
 				Class<?> zClass = object.getClass();
 				Field[] fields = zClass.getDeclaredFields();
-			
+
 				for (int i = 0; i < fields.length; i++) {
 					int index = i + 1;
 					Field field = fields[i];
@@ -294,13 +294,13 @@ public class AbstractJDBC<T> implements GenericJDBC<T> {
 						Field field = parentClass.getDeclaredFields()[i];
 						field.setAccessible(true);
 						String name = field.getName();
-						if(!name.equals("id")) {
+						if (!name.equals("id")) {
 							statement.setObject(indexParent, field.get(object));
 							indexParent += 1;
-						}else {
+						} else {
 							id = field.get(object);
 						}
-						
+
 					}
 					parentClass = parentClass.getSuperclass();
 				}
@@ -349,7 +349,7 @@ public class AbstractJDBC<T> implements GenericJDBC<T> {
 						sets.append(", ");
 					}
 					sets.append(value);
-				} 
+				}
 			}
 		}
 
@@ -378,39 +378,110 @@ public class AbstractJDBC<T> implements GenericJDBC<T> {
 		return sql;
 	}
 
+
 	@Override
-	public void delete(Object object) {
+	public List<T> findAll(Map<String, Object> properties, Pageble pageble, Object... where) {
+		Connection conn = null;
+		Statement statement = null;
+		ResultSet resultSet = null;
+		ResultSetMapper<T> resultSetMapper = new ResultSetMapper<>();
+
+		StringBuilder sql = createSQLfindAll(properties);
+		if(where != null && where.length > 0) {
+			sql.append(where[0]);
+		}
+		if(pageble != null) {
+			if(pageble.getSorter() != null) {
+				Sorter sorter = pageble.getSorter();
+				sql.append(" ORDER BY "+sorter.getSortName()+" "+sorter.getSortBy()+"");
+			}
+			
+			if(pageble.getOffset() != null && pageble.getLimit() != null) {
+				sql.append(" LIMIT "+pageble.getOffset()+", "+pageble.getLimit()+ " ");
+			}
+		}
+		
+		try{
+			conn = getConnection();
+			statement = conn.createStatement();
+			resultSet = statement.executeQuery(sql.toString());
+	
+			if (conn != null) {
+				return resultSetMapper.mapRow(resultSet, this.zClass);
+			}
+		} catch (SQLException ex) {
+			System.out.println(ex.getMessage());
+		} finally {
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if(resultSet != null) {
+					resultSet.close();
+				}
+			} catch (SQLException e2) {
+				e2.printStackTrace();
+			}
+		}
+		
+		return null;
+	}
+
+	private StringBuilder createSQLfindAll(Map<String, Object> properties) {
+		String tableName = "";
+		if (zClass.isAnnotationPresent(Table.class)) {
+			Table table = zClass.getAnnotation(Table.class);
+			tableName = table.name();
+		}
+		StringBuilder result = new StringBuilder("SELECT * FROM "+tableName+" WHERE 1=1");
+		if(properties != null && properties.size() > 0) {
+			String[] params = new String[properties.size()];
+			Object[] values = new Object[properties.size()];
+			int i = 0;
+			for(Map.Entry<?, ?> item: properties.entrySet()) {
+				params[i] = (String) item.getKey();
+				values[i] = item.getValue();
+				i++;
+			}
+			for (int i1 = 0; i1 < params.length; i1++) {
+				if(values[i1] instanceof String) {
+					result.append(" and LOWER("+params[i1]+") LIKE '%"+values[i1]+"%' ");
+				}else if (values[i1] instanceof Integer) {
+					result.append(" and "+params[i1]+" = "+values[i1]+" ");
+				}
+				
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public void delete(long id) {
 		Connection conn = null;
 		PreparedStatement statement = null;
 		try {
 			conn = getConnection();
 			conn.setAutoCommit(false);
-
-			String sql = createSQLDelete();
+			
+			String tableName = "";
+			if (zClass.isAnnotationPresent(Table.class)) {
+				Table table = zClass.getAnnotation(Table.class);
+				tableName = table.name();
+			}
+			String sql = "DELETE FROM "+tableName+" WHERE id = ?";
 			statement = conn.prepareStatement(sql);
 
 			if (conn != null) {
-				Class<?> zClass = object.getClass();			
-				Class<?> parentClass = zClass.getSuperclass();
-				Object id = null;
-				while (parentClass != null) {
-					for (int i = 0; i < parentClass.getDeclaredFields().length; i++) {
-						Field field = parentClass.getDeclaredFields()[i];
-						field.setAccessible(true);
-						String name = field.getName();
-						if(name.equals("id")) {
-							id = field.get(object);
-							break;
-						}
-					}
-					parentClass = parentClass.getSuperclass();
-				}
+				
 				statement.setObject(1, id);
 				statement.executeUpdate();
 				conn.commit();
 
 			}
-		} catch (SQLException | IllegalAccessException ex) {
+		} catch (SQLException ex) {
 			if (conn != null) {
 				try {
 					conn.rollback();
@@ -430,74 +501,32 @@ public class AbstractJDBC<T> implements GenericJDBC<T> {
 				e2.printStackTrace();
 			}
 		}
+
 	}
 
-	private String createSQLDelete() {
+	@Override
+	public <T> T findById(long id) {
+		Connection conn = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+		ResultSetMapper<T> resultSetMapper = new ResultSetMapper<>();
 		String tableName = "";
 		if (zClass.isAnnotationPresent(Table.class)) {
 			Table table = zClass.getAnnotation(Table.class);
 			tableName = table.name();
 		}
-		String id = null;
-		// check parent class
-		Class<?> parentClass = zClass.getSuperclass();
-		while (parentClass != null) {
-			for (Field field : parentClass.getDeclaredFields()) {
-				if (field.isAnnotationPresent(Column.class)) {
-					Column column = field.getAnnotation(Column.class);
-					String columnName = column.name(); 
-					if (columnName.equals("id")) {
-						id = columnName + " = ? ";
-					}
-				}
-			}
-			parentClass = parentClass.getSuperclass();
-		}
-
-		String sql = "DELETE FROM " + tableName + " WHERE " + id;
-		return sql;
-	}
-
-	@Override
-	public void findById(Object object) {
-		Connection conn = null;
-		PreparedStatement statement = null;
-		try {
+		String sql = "SELECT * FROM "+tableName+" WHERE id = ?";
+		try{
 			conn = getConnection();
-			conn.setAutoCommit(false);
-
-			String sql = createSQLFindById();
 			statement = conn.prepareStatement(sql);
-
+			statement.setObject(1, id);
+			resultSet = statement.executeQuery();
+	
 			if (conn != null) {
-				Class<?> zClass = object.getClass();			
-				Class<?> parentClass = zClass.getSuperclass();
-				Object id = null;
-				while (parentClass != null) {
-					for (int i = 0; i < parentClass.getDeclaredFields().length; i++) {
-						Field field = parentClass.getDeclaredFields()[i];
-						field.setAccessible(true);
-						String name = field.getName();
-						if(name.equals("id")) {
-							id = field.get(object);
-							break;
-						}
-					}
-					parentClass = parentClass.getSuperclass();
-				}
-				statement.setObject(1, id);
-				statement.executeUpdate();
-				conn.commit();
-
+				return resultSetMapper.mapRow(resultSet, this.zClass).get(0);
 			}
-		} catch (SQLException | IllegalAccessException ex) {
-			if (conn != null) {
-				try {
-					conn.rollback();
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				}
-			}
+		} catch (SQLException ex) {
+			System.out.println(ex.getMessage());
 		} finally {
 			try {
 				if (conn != null) {
@@ -506,36 +535,14 @@ public class AbstractJDBC<T> implements GenericJDBC<T> {
 				if (statement != null) {
 					statement.close();
 				}
+				if(resultSet != null) {
+					resultSet.close();
+				}
 			} catch (SQLException e2) {
 				e2.printStackTrace();
 			}
 		}
-	}
-
-	private String createSQLFindById() {
-		String tableName = "";
-		if (zClass.isAnnotationPresent(Table.class)) {
-			Table table = zClass.getAnnotation(Table.class);
-			tableName = table.name();
-		}
-		String id = null;
-		// check parent class
-		Class<?> parentClass = zClass.getSuperclass();
-		while (parentClass != null) {
-			for (Field field : parentClass.getDeclaredFields()) {
-				if (field.isAnnotationPresent(Column.class)) {
-					Column column = field.getAnnotation(Column.class);
-					String columnName = column.name(); 
-					if (columnName.equals("id")) {
-						id = columnName + " = ? ";
-					}
-				}
-			}
-			parentClass = parentClass.getSuperclass();
-		}
-
-		String sql = "SELECT * FROM " + tableName + " WHERE " + id;
-		return sql;
+		return null;
 	}
 
 }

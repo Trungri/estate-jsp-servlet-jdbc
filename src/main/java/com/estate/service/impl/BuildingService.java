@@ -35,19 +35,15 @@ public class BuildingService implements IBuildingService{
 	}
 
 	@Override
-	public BuildingDTO delete(BuildingDTO buildingDTO) {
-		BuildingConverter buildingConverter = new BuildingConverter();
-		BuildingEntity buildingEntity = buildingConverter.convertToEntity(buildingDTO);
-		buildingRepository.delete(buildingEntity);
+	public BuildingDTO delete(Long id) {
+		buildingRepository.delete(id);
 		return null;
 	}
 
 	@Override
-	public BuildingDTO findById(BuildingDTO buildingDTO) {
-		BuildingConverter buildingConverter = new BuildingConverter();
-		BuildingEntity buildingEntity = buildingConverter.convertToEntity(buildingDTO);
-		buildingRepository.findById(buildingEntity);
-		return buildingDTO;
+	public BuildingDTO findById(Long id) {
+		buildingRepository.findById(id);
+		return null;
 	}
 
 }

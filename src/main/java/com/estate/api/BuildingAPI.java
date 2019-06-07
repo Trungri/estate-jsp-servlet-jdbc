@@ -51,8 +51,9 @@ public class BuildingAPI extends HttpServlet{
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("application/json");
 		BuildingDTO buildingDTO = HttpUtil.of(request.getReader()).toModel(BuildingDTO.class);
-		buildingDTO = buildingService.delete(buildingDTO);
-		mapper.writeValue(response.getOutputStream(), buildingDTO);
+		Long id = buildingDTO.getId();
+		buildingDTO = buildingService.delete(id);
+		mapper.writeValue(response.getOutputStream(), id);
 	}
 	
 	@Override
@@ -61,7 +62,8 @@ public class BuildingAPI extends HttpServlet{
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("application/json");
 		BuildingDTO buildingDTO = HttpUtil.of(request.getReader()).toModel(BuildingDTO.class);
-		buildingDTO = buildingService.findById(buildingDTO);
+		Long id = buildingDTO.getId();
+		buildingDTO = buildingService.findById(id);
 		mapper.writeValue(response.getOutputStream(), buildingDTO);
 	}
 	
