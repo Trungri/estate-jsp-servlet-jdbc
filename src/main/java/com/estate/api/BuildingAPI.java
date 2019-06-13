@@ -65,8 +65,7 @@ public class BuildingAPI extends HttpServlet{
 		Long id = buildingDTO.getId();
 		buildingDTO = buildingService.findById(id);
 		mapper.writeValue(response.getOutputStream(), buildingDTO);
-		//da chinh sua
-		ObjectMapper mapper2 = new ObjectMapper();
+		   
 	}
 	
 
