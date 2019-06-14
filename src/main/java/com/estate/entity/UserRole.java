@@ -1,7 +1,11 @@
 package com.estate.entity;
 
 import com.estate.annotation.Column;
+import com.estate.annotation.Entity;
+import com.estate.annotation.Table;
 
+@Entity
+@Table(name = "user_role")
 public class UserRole extends BaseEntity{
 	@Column(name = "userid")
 	private Long userId;

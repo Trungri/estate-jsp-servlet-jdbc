@@ -1,4 +1,4 @@
-package com.estate.controller.admin;
+package com.estate.controller;
 
 import java.io.IOException;
 
@@ -9,13 +9,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(urlPatterns = {"/admin-home"})
-public class HomeController extends HttpServlet{
+@WebServlet(urlPatterns = {"/admin-building"})
+public class BuildingController extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher rd = request.getRequestDispatcher("/views/admin/home.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("/views/building/list.jsp");
 		rd.forward(request, response);
 	}
 	

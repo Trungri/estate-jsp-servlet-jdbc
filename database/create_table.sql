@@ -92,5 +92,22 @@ ALTER TABLE assignmentbuilding ADD CONSTRAINT fk_assignmentbuilding_user FOREIGN
 ALTER TABLE assignmentbuilding ADD CONSTRAINT fk_assignmentbuilding_building FOREIGN KEY (buildingid) REFERENCES building(id);
 
 
+CREATE TABLE rentarea(
+  id bigint NOT NULL PRIMARY KEY auto_increment,
+  value VARCHAR(255) NOT NULL,
+  buildingid bigint NOT NULL,
+  createddate TIMESTAMP NULL,
+  modifieddate TIMESTAMP NULL,
+  createdby VARCHAR(255) NULL,
+  modifiedby VARCHAR(255) NULL
+);
+
+ALTER TABLE rentarea ADD CONSTRAINT fk_rentarea_building FOREIGN KEY (buildingid) REFERENCES building(id);
+
+
+
+
+
+
 
 
