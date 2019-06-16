@@ -5,12 +5,13 @@
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title></title>
+<title>Edit</title>
 <!-- upload pic -->
-<link
-	href="<c:url value='/template/web/bootstrap/css/bootstrap.min.css'/>  id="bootstrap-css">
+
+<script
+	src="<c:url value='template/admin/js/custom/uploadPicture.js' />"></script>
 <link rel="stylesheet"
-	href="<c:url value='/template/admin/css/uploadPicture.css' />" />
+	href="<c:url value='/template/admin/css/custom/uploadPicture.css' />" />
 </head>
 
 <body>
@@ -18,8 +19,8 @@
 		<div class="main-content-inner">
 			<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 				<ul class="breadcrumb">
-					<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Trang
-							chủ</a></li>
+					<li><i class="ace-icon fa fa-home home-icon"></i> <a
+						href="admin-home">Trang chủ</a></li>
 					<li>Sản phẩm</li>
 					<li>Chỉnh sửa thông tin</li>
 				</ul>
@@ -60,11 +61,11 @@
 							</div>
 							<div class="form-group">
 								<label class="col-sm-3"><b>Số tầng hầm</b></label> <input
-									class="col-sm-9" type="text" class="form-control input-sm" />
+									class="col-sm-9" type="number" class="form-control input-sm" />
 							</div>
 							<div class="form-group">
 								<label class="col-sm-3"><b>Diện tích sàn</b></label> <input
-									class="col-sm-9" type="text" class="form-control input-sm" />
+									class="col-sm-9" type="number" class="form-control input-sm" />
 							</div>
 							<div class="form-group">
 								<label class="col-sm-3"><b>Hướng</b></label> <input
@@ -84,7 +85,7 @@
 							</div>
 							<div class="form-group">
 								<label class="col-sm-3"><b>Giá thuê</b></label> <input
-									class="col-sm-9" type="text" class="form-control input-sm" />
+									class="col-sm-9" type="number" class="form-control input-sm" />
 							</div>
 							<div class="form-group">
 								<label class="col-sm-3"><b>Mô tả giá</b></label> <input
@@ -156,40 +157,17 @@
 								</div>
 							</div>
 							<!-- Upload picture -->
-
-							<div class="container">
-								<div class="row">
-									<div
-										class="col-xs-12 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-										<!-- image-preview-filename input [CUT FROM HERE]-->
-										<div class="input-group image-preview">
-											<input type="text"
-												class="form-control image-preview-filename"
-												disabled="disabled">
-											<!-- don't give a name === doesn't send on POST/GET -->
-											<span class="input-group-btn"> <!-- image-preview-clear button -->
-												<button type="button"
-													class="btn btn-default image-preview-clear"
-													style="display: none;">
-													<span class="glyphicon glyphicon-remove"></span> Clear
-												</button> <!-- image-preview-input -->
-												<div class="btn btn-default image-preview-input">
-													<span class="glyphicon glyphicon-folder-open"></span> <span
-														class="image-preview-input-title">Browse</span> <input
-														type="file" accept="image/png, image/jpeg, image/gif"
-														name="input-file-preview" />
-													<!-- rename it -->
-												</div>
-											</span>
-										</div>
-										<!-- /input-group image-preview [TO HERE]-->
-									</div>
+							<div class="form-group">
+								<label class="col-sm-3"><b>Chọn hình ảnh</b></label>
+								<div class="col-sm-9">
+									<input type="file" class="form-control-file" id="exampleFormControlFile1">
 								</div>
 							</div>
 
 							<button class="btn btn-info" type="button">
-								<i class="ace-icon fa fa-check bigger-110"></i> Sửa
+								<i class="ace-icon fa fa-check bigger-110"></i> Thêm sản phẩm
 							</button>
+							<button type="button" class="btn btn-warning">Sửa</button>
 						</div>
 					</div>
 				</div>
@@ -197,11 +175,6 @@
 		</div>
 	</div>
 
-	<!-- upload pic -->
-	<script
-		src="<c:url value='/template/admin/assets/js/bootstrap.min.js' />"></script>
-	<script src="<c:url value='/template/admin/js/jquery-1.11.1.min.js'/>"></script>
-	<script src="<c:url value='template/admin/js/uploadPicture.js' />"></script>
 </body>
 
 </html>

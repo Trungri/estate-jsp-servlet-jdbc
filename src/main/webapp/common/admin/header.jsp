@@ -22,7 +22,7 @@
         </button>
 
         <div class="navbar-header pull-left">
-            <a href="#" class="navbar-brand">
+            <a href="admin-home" class="navbar-brand">
                 <small>
                     <i class="fa fa-leaf"></i>
                     Trang chủ

@@ -1,10 +1,14 @@
 package com.estate.service.impl;
 
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.Map;
 
+import com.estate.builder.BuildingSearchBuilder;
 import com.estate.converter.BuildingConverter;
 import com.estate.dto.BuildingDTO;
 import com.estate.entity.BuildingEntity;
+import com.estate.paging.Pageble;
 import com.estate.repository.IBuildingRepository;
 import com.estate.repository.impl.BuildingRepository;
 import com.estate.service.IBuildingService;
@@ -43,6 +47,11 @@ public class BuildingService implements IBuildingService{
 	@Override
 	public BuildingDTO findById(Long id) {
 		buildingRepository.findById(id);
+		return null;
+	}
+
+	@Override
+	public List<BuildingDTO> findAll(BuildingSearchBuilder builder, Pageble pageble) {
 		return null;
 	}
 

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@include file="/common/taglib.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
@@ -23,6 +24,7 @@
 			<div class="page-content">
 				<div class="row">
 					<div class="col-xs-12">
+						<!--  search box -->
 						<div class="widget-box table-filter">
 							<div class="widget-header">
 								<h4 class="widget-title">Tìm kiếm</h4>
@@ -165,9 +167,68 @@
 								</div>
 							</div>
 						</div>
+						<!--  button add & delete -->
+						<div class="table-btn-controls">
+							<div class="pull-right tableTools-container">
+								<div class="dt-buttons btn-overlap btn-group">
+									<a flag="info"
+										class="dt-button buttons-colvis btn btn-white btn-primary btn-bold"
+										data-toggle="tooltip" title='Thêm tòa nhà'
+										href='<c:url value="/admin-building?action=EDIT"/>'> <span><i
+											class="fa fa-plus-circle bigger-110 purple"></i></span>
+									</a>
+									<button type="button"
+										class="dt-button buttons-html5 btn btn-white btn-primary btn-bold"
+										data-toggle="tooltip" title='Xóa tòa nhà'>
+										<span><i class="fa fa-trash-o bigger-110 pink"></i></span>
+									</button>
+								</div>
+							</div>
+						</div>
 					</div>
-
-
+				</div>
+				<!-- table -->
+				<div class="row">
+					<div class="col-xs-12">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Ngày</th>
+									<th>Tên sản phẩm</th>
+									<th>Địa chỉ</th>
+									<th>Tên quản lí</th>
+									<th>SĐT</th>
+									<th>Thao tác</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>John</td>
+									<td>Doe</td>
+									<td>john@example.com</td>
+									<td>John</td>
+									<td>Doe</td>
+									<td>hi</td>
+								</tr>
+								<tr>
+									<td>Mary</td>
+									<td>Moe</td>
+									<td>mary@example.com</td>
+									<td>John</td>
+									<td>Doe</td>
+									<td>john@example.com</td>
+								</tr>
+								<tr>
+									<td>July</td>
+									<td>Dooley</td>
+									<td>july@example.com</td>
+									<td>John</td>
+									<td>Doe</td>
+									<td>john@example.com</td>	
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>

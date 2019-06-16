@@ -15,7 +15,15 @@ public class BuildingController extends HttpServlet{
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher rd = request.getRequestDispatcher("/views/building/list.jsp");
+		String action = request.getParameter("action");
+		String url = "";
+		if (action.equals("LIST")) {
+			url = "/views/building/list.jsp";
+			request.setAttribute("buildings", "");
+		} else if (action.equals("EDIT")) {
+			url = "/views/building/edit.jsp";
+		}
+		RequestDispatcher rd = request.getRequestDispatcher(url);
 		rd.forward(request, response);
 	}
 	
