@@ -1,7 +1,7 @@
 package com.estate.dto;
 
 
-public class BuildingDTO extends AbstractDTO{
+public class BuildingDTO extends AbstractDTO<BuildingDTO>{
 	
 	private String name;
 	private String ward;
@@ -24,6 +24,12 @@ public class BuildingDTO extends AbstractDTO{
 	private String managerName;
 	private String managerPhone;
 	private String type;
+	private String direction;
+	private String level;
+	private Integer costRentFrom;
+	private Integer costRentTo;
+	private Integer areaRentFrom;
+	private Integer areaRentTo;
 	private String[] buildingTypes = new String[] {};
 	
 	
@@ -158,6 +164,42 @@ public class BuildingDTO extends AbstractDTO{
 	}
 	public void setBuildingTypes(String[] buildingTypes) {
 		this.buildingTypes = buildingTypes;
+	}
+	public String getDirection() {
+		return direction;
+	}
+	public void setDirection(String direction) {
+		this.direction = direction;
+	}
+	public String getLevel() {
+		return level;
+	}
+	public void setLevel(String level) {
+		this.level = level;
+	}
+	public Integer getCostRentFrom() {
+		return costRentFrom;
+	}
+	public void setCostRentFrom(Integer costRentFrom) {
+		this.costRentFrom = costRentFrom;
+	}
+	public Integer getCostRentTo() {
+		return costRentTo;
+	}
+	public void setCostRentTo(Integer costRentTo) {
+		this.costRentTo = costRentTo;
+	}
+	public Integer getAreaRentFrom() {
+		return areaRentFrom;
+	}
+	public void setAreaRentFrom(Integer areaRentFrom) {
+		this.areaRentFrom = areaRentFrom;
+	}
+	public Integer getAreaRentTo() {
+		return areaRentTo;
+	}
+	public void setAreaRentTo(Integer areaRentTo) {
+		this.areaRentTo = areaRentTo;
 	}
 	
 	

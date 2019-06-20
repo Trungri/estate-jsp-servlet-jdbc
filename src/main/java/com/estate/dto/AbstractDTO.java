@@ -1,8 +1,10 @@
 package com.estate.dto;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
-public class AbstractDTO {
+public class AbstractDTO<T> {
 
 	private Long id;
 	private String createdBy;
@@ -12,6 +14,8 @@ public class AbstractDTO {
 	private int maxPageItem = 10;
 	private int page = 1; 
 	private String action;
+	private List<T> listResults = new ArrayList<T>();
+	
 	
 	public Long getId() {
 		return id;
@@ -75,6 +79,14 @@ public class AbstractDTO {
 
 	public void setAction(String action) {
 		this.action = action;
+	}
+
+	public List<T> getListResults() {
+		return listResults;
+	}
+
+	public void setListResults(List<T> listResults) {
+		this.listResults = listResults;
 	}
 
 }

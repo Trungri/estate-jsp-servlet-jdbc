@@ -17,6 +17,10 @@ public class BuildingService implements IBuildingService{
 
 	private IBuildingRepository buildingRepository;
 	
+	public static BuildingService getInstance() {
+		return new BuildingService();
+	}
+	
 	public BuildingService() {
 		buildingRepository = new BuildingRepository();
 	}
@@ -52,7 +56,21 @@ public class BuildingService implements IBuildingService{
 
 	@Override
 	public List<BuildingDTO> findAll(BuildingSearchBuilder builder, Pageble pageble) {
+		
 		return null;
 	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
