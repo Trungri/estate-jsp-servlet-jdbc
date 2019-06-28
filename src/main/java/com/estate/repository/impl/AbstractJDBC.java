@@ -436,7 +436,7 @@ public class AbstractJDBC<T> implements GenericJDBC<T> {
 			Table table = zClass.getAnnotation(Table.class);
 			tableName = table.name();
 		}
-		StringBuilder result = new StringBuilder("SELECT * FROM "+tableName+" WHERE 1=1");
+		StringBuilder result = new StringBuilder("SELECT * FROM "+tableName+" A WHERE 1=1");
 		if(properties != null && properties.size() > 0) {
 			String[] params = new String[properties.size()];
 			Object[] values = new Object[properties.size()];
@@ -450,6 +450,8 @@ public class AbstractJDBC<T> implements GenericJDBC<T> {
 				if(values[i1] instanceof String) {
 					result.append(" and LOWER("+params[i1]+") LIKE '%"+values[i1].toString().toLowerCase()+"%' ");
 				}else if (values[i1] instanceof Integer) {
+					result.append(" and "+params[i1]+" = "+values[i1]+" ");
+				}else if (values[i1] instanceof Long) {
 					result.append(" and "+params[i1]+" = "+values[i1]+" ");
 				}
 				

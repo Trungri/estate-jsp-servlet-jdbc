@@ -2,6 +2,7 @@ package com.estate.controller;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,19 +16,23 @@ import com.estate.paging.PageRequest;
 import com.estate.paging.Pageble;
 import com.estate.service.IBuildingService;
 import com.estate.service.impl.BuildingService;
+import com.estate.utils.DataUtils;
 import com.estate.utils.FormUtil;
 
 @WebServlet(urlPatterns = { "/admin-building" })
 public class BuildingController extends HttpServlet {
+	
 	private static final long serialVersionUID = 1L;
-
+	
+	@Inject
 	private IBuildingService buildingService;
 
-	public BuildingController() {
+	/*public BuildingController() {
 		if(buildingService == null) {
 			buildingService = new BuildingService();
 		}
-	}
+	}*/
+	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -43,7 +48,8 @@ public class BuildingController extends HttpServlet {
 		} else if (action.equals("EDIT")) {
 			url = "/views/building/edit.jsp";
 		}
-		
+		request.setAttribute("districts", DataUtils.getDistricts());
+		request.setAttribute("buildingTypes", DataUtils.getBuildingType());
 		request.setAttribute("model", model);
 		RequestDispatcher rd = request.getRequestDispatcher(url);
 		rd.forward(request, response);
@@ -52,18 +58,17 @@ public class BuildingController extends HttpServlet {
 	private BuildingSearchBuilder initBuildingBuider(BuildingDTO model) {
 		BuildingSearchBuilder builder = new BuildingSearchBuilder.Builder()
 				.setName(model.getName())
-				.setNumberOfBasement(model.getNumberOfBasement())
+				//.setNumberOfBasement(model.getNumberOfBasement())
 				.setWard(model.getWard())
-				.setStreet(model.getStreet())
-				.setAreaRentFrom(model.getAreaRentFrom())
-				.setAreaRentTo(model.getAreaRentTo())
-				.setCostRentFrom(model.getAreaRentFrom())
-				.setCostRentTo(model.getCostRentTo()).build();
+				.setStreet(model.getStreet()).setAreaRentFrom(model.getAreaRentFrom()).setAreaRentTo(model.getAreaRentTo())
+				.setCostRentFrom(model.getAreaRentFrom()).setCostRentTo(model.getCostRentTo())
+				.setBuildingTypes(model.getBuildingTypes())
+				.build();
 		return builder;
 	}
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
 		super.doPost(req, resp);
 	}
 }

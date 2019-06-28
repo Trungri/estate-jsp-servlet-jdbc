@@ -2,7 +2,9 @@ package com.estate.service.impl;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
 
 import com.estate.builder.BuildingSearchBuilder;
 import com.estate.converter.BuildingConverter;
@@ -13,21 +15,27 @@ import com.estate.repository.IBuildingRepository;
 import com.estate.repository.impl.BuildingRepository;
 import com.estate.service.IBuildingService;
 
-public class BuildingService implements IBuildingService{
+public class BuildingService implements IBuildingService {
 
+	@Inject
 	private IBuildingRepository buildingRepository;
 	
-	public static BuildingService getInstance() {
-		return new BuildingService();
-	}
+	@Inject
+	private BuildingConverter buildingConverter;
+
 	
-	public BuildingService() {
-		buildingRepository = new BuildingRepository();
-	}
-	
+
+	/*public BuildingService() {
+		if(buildingRepository == null) {
+			buildingRepository = new BuildingRepository();
+		}
+		if(buildingConverter == null) {
+			buildingConverter = new BuildingConverter();
+		}
+	}*/
+
 	@Override
 	public BuildingDTO save(BuildingDTO buildingDTO) {
-		BuildingConverter buildingConverter = new BuildingConverter();
 		BuildingEntity buildingEntity = buildingConverter.convertToEntity(buildingDTO);
 		buildingEntity.setCreatedDate(new Timestamp(System.currentTimeMillis()));
 		Long id = buildingRepository.insert(buildingEntity);
@@ -56,21 +64,10 @@ public class BuildingService implements IBuildingService{
 
 	@Override
 	public List<BuildingDTO> findAll(BuildingSearchBuilder builder, Pageble pageble) {
-		
-		return null;
+		List<BuildingEntity> buildingEntities = buildingRepository.findAll(builder, pageble);
+		List<BuildingDTO> results = buildingEntities.stream()
+				.map(item -> buildingConverter.convertToDTO(item)).collect(Collectors.toList());
+		return results;
 	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

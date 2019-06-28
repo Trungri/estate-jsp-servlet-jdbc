@@ -60,11 +60,10 @@
 													<label><b>Quận hiện có</b></label>
 													<div class="fg-line">
 														<select class="form-control" id="sel1" style="width: 50%" name="district">
-															<option selected>--- Chọn quận ---</option>
-															<option value="QUAN_1">Quận 1</option>
-															<option value="QUAN_2">Quận 2</option>
-															<option value="QUAN_3">Quận 3</option>
-															<option value="QUAN_4">Quận 4</option>
+															<option value="">--- Chọn quận ---</option>
+															<c:forEach var="item" items="${districts}">
+																<option value="${item.key}">${item.value}</option>
+															</c:forEach>
 														</select>
 													</div>
 												</div>
@@ -158,9 +157,9 @@
 												<div class="col-sm-12">
 													<label><b>Loại toà nhà</b></label> 
 													<div class="fg-line">
-														<label class="checkbox-inline"><input type="checkbox" value="TANG_TRET" name="buildingTypes"><b>Tầng trệt</b></label> 
-														<label class="checkbox-inline"><input type="checkbox" value="NGUYEN_CAN" name="buildingTypes"><b>Nguyên căn</b></label> 
-														<label class="checkbox-inline"><input type="checkbox" value="NOI_THAT" name="buildingTypes"><b>Nội thất</b></label>
+														<c:forEach var="item" items="${buildingTypes}">
+															<label class="checkbox-inline"><input type="checkbox" value="${item.key}" name="buildingTypes"><b>${item.value}</b></label> 
+														</c:forEach>
 													</div>
 												</div>
 											</div>
@@ -207,39 +206,27 @@
 						<table class="table table-striped">
 							<thead>
 								<tr>
-									<th>Ngày</th>
 									<th>Tên sản phẩm</th>
 									<th>Địa chỉ</th>
+									<th>Giá thuê</th>
+									<th>Diện tích thuê</th>
+									<th>Loại tòa nhà</th>
 									<th>Tên quản lí</th>
-									<th>SĐT</th>
-									<th>Thao tác</th>
+									<th>SĐT quản lí</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>John</td>
-									<td>Doe</td>
-									<td>john@example.com</td>
-									<td>John</td>
-									<td>Doe</td>
-									<td>hi</td>
-								</tr>
-								<tr>
-									<td>Mary</td>
-									<td>Moe</td>
-									<td>mary@example.com</td>
-									<td>John</td>
-									<td>Doe</td>
-									<td>john@example.com</td>
-								</tr>
-								<tr>
-									<td>July</td>
-									<td>Dooley</td>
-									<td>july@example.com</td>
-									<td>John</td>
-									<td>Doe</td>
-									<td>john@example.com</td>
-								</tr>
+								<c:forEach var="item" items="${model.listResults}">
+									<tr>
+										<td>${item.name}</td>
+										<td>${item.address}</td>
+										<td>${item.costRent}</td>
+										<td>${item.rentArea}</td>
+										<td>${item.type}</td>
+										<td>${item.managerName}</td>
+										<td>${item.managerPhone}</td>
+									</tr>
+								</c:forEach>
 							</tbody>
 						</table>
 					</div>
