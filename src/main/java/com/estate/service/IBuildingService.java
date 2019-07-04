@@ -9,9 +9,12 @@ import com.estate.paging.Pageble;
 
 public interface IBuildingService {
 	BuildingDTO save (BuildingDTO newBuilding);
+	void update (BuildingDTO updateBuilding, long id);
+	void delete(Long[] ids);
 	List<BuildingDTO> findAll(BuildingSearchBuilder builder, Pageble pageble);
+	BuildingDTO findById (long id);
 	
-	BuildingDTO update (BuildingDTO building);
+	
 	BuildingDTO delete (Long id);
-	BuildingDTO findById (Long id);
+	
 }

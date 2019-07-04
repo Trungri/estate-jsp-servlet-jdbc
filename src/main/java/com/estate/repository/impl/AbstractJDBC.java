@@ -33,7 +33,7 @@ public class AbstractJDBC<T> implements GenericJDBC<T> {
 	private Connection getConnection() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			String dbURL = "jdbc:mysql://localhost:3306/estate4month2019";
+			String dbURL = "jdbc:mysql://localhost:3306/estate4month2019?useUnicode=true&characterEncoding=UTF-8";
 			String username = "root";
 			String password = "abc123";
 			return DriverManager.getConnection(dbURL, username, password);
@@ -545,6 +545,49 @@ public class AbstractJDBC<T> implements GenericJDBC<T> {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public void deleteByProperty(String where) {
+		Connection conn = null;
+		Statement statement = null;
+		try {
+			conn = getConnection();
+			conn.setAutoCommit(false);
+			
+			String tableName = "";
+			if (zClass.isAnnotationPresent(Table.class)) {
+				Table table = zClass.getAnnotation(Table.class);
+				tableName = table.name();
+			}
+			String sql = "DELETE FROM "+tableName+" " +where;
+			statement = conn.createStatement();
+
+			if (conn != null) {
+				statement.execute(sql);
+				conn.commit();
+
+			}
+		} catch (SQLException ex) {
+			if (conn != null) {
+				try {
+					conn.rollback();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+			}
+		} finally {
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+			} catch (SQLException e2) {
+				e2.printStackTrace();
+			}
+		}
 	}
 
 }

@@ -10,9 +10,10 @@ public interface GenericJDBC<T> {
 	void update(String sql, Object... parameters);
 	Long insert(String sql, Object... parameters);*/
 	
+	List<T> findAll(Map<String, Object> properties,Pageble pageble, Object... where);
 	Long insert(Object object);
 	void update(Object object);
 	void delete(long id);
-	List<T> findAll(Map<String, Object> properties,Pageble pageble, Object... where);
+	void deleteByProperty(String where);
 	<T> T findById(long id);
 }

@@ -5,8 +5,9 @@ public class BuildingSearchBuilder {
 	private String name;
 	private String ward;
 	private String street;
-	//private Integer numberOfBasement;
-	
+	private String numberOfBasement;
+	private String buildingArea;
+	private String district;	
 	private String costRentFrom;
 	private String costRentTo;
 	private String areaRentFrom;
@@ -25,9 +26,17 @@ public class BuildingSearchBuilder {
 		return street;
 	}
 	
-	/*public Integer getNumberOfBasement() {
+	public String getNumberOfBasement() {
 		return numberOfBasement;
-	}*/
+	}
+	
+	public String getBuildingArea() {
+		return buildingArea;
+	}
+	
+	public String getDistrict() {
+		return district;
+	}
 
 	public String getCostRentFrom() {
 		return costRentFrom;
@@ -55,7 +64,9 @@ public class BuildingSearchBuilder {
 		this.name = builder.name;
 		this.ward = builder.ward;
 		this.street = builder.street;
-		//this.numberOfBasement = builder.numberOfBasement;
+		this.numberOfBasement = builder.numberOfBasement;
+		this.buildingArea = builder.buildingArea;
+		this.district = builder.district;
 		this.costRentFrom = builder.costRentFrom;
 		this.costRentTo = builder.costRentTo;
 		this.areaRentFrom = builder.areaRentFrom;
@@ -68,7 +79,9 @@ public class BuildingSearchBuilder {
 		private String name;
 		private String ward;
 		private String street;
-		//private Integer numberOfBasement;
+		private String numberOfBasement;
+		private String buildingArea;
+		private String district;
 		private String costRentFrom;
 		private String costRentTo;
 		private String areaRentFrom;
@@ -91,10 +104,21 @@ public class BuildingSearchBuilder {
 			return this;
 		}
 
-		/*public Builder setNumberOfBasement(Integer numberOfBasement) {
+		public Builder setNumberOfBasement(String numberOfBasement) {
 			this.numberOfBasement = numberOfBasement;
 			return this;
-		}*/
+		}
+
+
+		public Builder setBuildingArea(String buildingArea) {
+			this.buildingArea = buildingArea;
+			return this;
+		}
+		
+		public Builder setDistrict(String district) {
+			this.district = district;
+			return this;
+		}
 
 		public Builder setCostRentFrom(String costRentFrom) {
 			this.costRentFrom = costRentFrom;
@@ -123,8 +147,6 @@ public class BuildingSearchBuilder {
 
 		public BuildingSearchBuilder build() {
 			return new BuildingSearchBuilder(this);
-		}
-		
-		
+		}				
 	}
 }

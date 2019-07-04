@@ -40,9 +40,9 @@ public class BuildingAPI extends HttpServlet{
 		ObjectMapper mapper = new ObjectMapper();
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("application/json");
-		BuildingDTO buildingDTO = HttpUtil.of(request.getReader()).toModel(BuildingDTO.class);
-		buildingDTO = buildingService.update(buildingDTO);
-		mapper.writeValue(response.getOutputStream(), buildingDTO);
+		BuildingDTO updateBuilding = HttpUtil.of(request.getReader()).toModel(BuildingDTO.class);
+		buildingService.update(updateBuilding, updateBuilding.getId());
+		mapper.writeValue(response.getOutputStream(), "{}");
 	}
 	
 	@Override
@@ -51,12 +51,11 @@ public class BuildingAPI extends HttpServlet{
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("application/json");
 		BuildingDTO buildingDTO = HttpUtil.of(request.getReader()).toModel(BuildingDTO.class);
-		Long id = buildingDTO.getId();
-		buildingDTO = buildingService.delete(id);
-		mapper.writeValue(response.getOutputStream(), id);
+		buildingService.delete(buildingDTO.getIds());
+		mapper.writeValue(response.getOutputStream(), "{}");
 	}
 	
-	@Override
+	/*@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		request.setCharacterEncoding("UTF-8");
@@ -66,7 +65,7 @@ public class BuildingAPI extends HttpServlet{
 		buildingDTO = buildingService.findById(id);
 		mapper.writeValue(response.getOutputStream(), buildingDTO);
 		   
-	}
+	}*/
 	
 
 }
