@@ -9,21 +9,24 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.estate.annotation.Column;
 import com.estate.annotation.Table;
 import com.estate.mapper.ResultSetMapper;
 import com.estate.paging.Pageble;
 import com.estate.paging.Sorter;
-import com.estate.repository.GenericJDBC;
+import com.estate.repository.JpaRepository;
 
-public class AbstractJDBC<T> implements GenericJDBC<T> {
+public class AbstractJDBC<T> implements JpaRepository<T> {
 
 	private Class<T> zClass;
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") 
 	public AbstractJDBC() {
 		Type type = getClass().getGenericSuperclass();
 		ParameterizedType parameterizedType = (ParameterizedType) type;
@@ -391,7 +394,7 @@ public class AbstractJDBC<T> implements GenericJDBC<T> {
 			sql.append(where[0]);
 		}
 		if(pageble != null) {
-			if(pageble.getSorter() != null) {
+			if(pageble.getSorter() != null && StringUtils.isNotBlank(pageble.getSorter().getSortName())) {
 				Sorter sorter = pageble.getSorter();
 				sql.append(" ORDER BY "+sorter.getSortName()+" "+sorter.getSortBy()+"");
 			}
@@ -427,7 +430,7 @@ public class AbstractJDBC<T> implements GenericJDBC<T> {
 			}
 		}
 		
-		return null;
+		return new ArrayList<>();
 	}
 
 	private StringBuilder createSQLfindAll(Map<String, Object> properties) {
@@ -588,6 +591,77 @@ public class AbstractJDBC<T> implements GenericJDBC<T> {
 				e2.printStackTrace();
 			}
 		}
+	}
+
+	@Override
+	public int countByProperty(Map<String, Object> properties, Object... where) {
+		Connection conn = null;
+		Statement statement = null;
+		ResultSet resultSet = null;
+		ResultSetMapper<T> resultSetMapper = new ResultSetMapper<>();
+
+		StringBuilder sql = createCountByProperty(properties);
+		if(where != null && where.length > 0) {
+			sql.append(where[0]);
+		}
+		
+		try{
+			conn = getConnection();
+			statement = conn.createStatement();
+			resultSet = statement.executeQuery(sql.toString());	
+			if (conn != null) {
+				while(resultSet.next()) {
+					return resultSet.getInt("COUNT(*)");
+				}
+			}
+		} catch (SQLException ex) {
+			System.out.println(ex.getMessage());
+		} finally {
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if(resultSet != null) {
+					resultSet.close();
+				}
+			} catch (SQLException e2) {
+				e2.printStackTrace();
+			}
+		}
+		return 0;
+	}
+
+	private StringBuilder createCountByProperty(Map<String, Object> properties) {
+		String tableName = "";
+		if (zClass.isAnnotationPresent(Table.class)) {
+			Table table = zClass.getAnnotation(Table.class);
+			tableName = table.name();
+		}
+		StringBuilder result = new StringBuilder("SELECT COUNT(*) FROM "+tableName+" A WHERE 1=1");
+		if(properties != null && properties.size() > 0) {
+			String[] params = new String[properties.size()];
+			Object[] values = new Object[properties.size()];
+			int i = 0;
+			for(Map.Entry<?, ?> item: properties.entrySet()) {
+				params[i] = (String) item.getKey();
+				values[i] = item.getValue();
+				i++;
+			}
+			for (int i1 = 0; i1 < params.length; i1++) {
+				if(values[i1] instanceof String) {
+					result.append(" and LOWER("+params[i1]+") LIKE '%"+values[i1].toString().toLowerCase()+"%' ");
+				}else if (values[i1] instanceof Integer) {
+					result.append(" and "+params[i1]+" = "+values[i1]+" ");
+				}else if (values[i1] instanceof Long) {
+					result.append(" and "+params[i1]+" = "+values[i1]+" ");
+				}
+				
+			}
+		}
+		return result;
 	}
 
 }

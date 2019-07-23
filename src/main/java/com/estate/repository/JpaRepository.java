@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.estate.paging.Pageble;
 
-public interface GenericJDBC<T> {
+public interface JpaRepository<T> {
 	/*List<T> query(String sql, Object... parameters);
 	void update(String sql, Object... parameters);
 	Long insert(String sql, Object... parameters);*/
@@ -16,4 +16,5 @@ public interface GenericJDBC<T> {
 	void delete(long id);
 	void deleteByProperty(String where);
 	<T> T findById(long id);
+	int countByProperty(Map<String, Object> properties, Object... where);
 }

@@ -12,6 +12,7 @@ public interface IBuildingService {
 	void update (BuildingDTO updateBuilding, long id);
 	void delete(Long[] ids);
 	List<BuildingDTO> findAll(BuildingSearchBuilder builder, Pageble pageble);
+	int getTotalItem(BuildingSearchBuilder builder);
 	BuildingDTO findById (long id);
 	
 	

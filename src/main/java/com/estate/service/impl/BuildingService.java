@@ -72,6 +72,11 @@ public class BuildingService implements IBuildingService {
 				.map(item -> buildingConverter.convertToDTO(item)).collect(Collectors.toList());
 		return results;
 	}
+	
+	@Override
+	public int getTotalItem(BuildingSearchBuilder builder) {
+		return buildingRepository.countByProperty(builder);
+	}
 
 	@Override
 	public BuildingDTO findById(long id) {

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@include file="/common/taglib.jsp"%>
-<c:url var="buildingAPI" value="/api-admin-building"/>
+<c:url var="buildingAPI" value="/api-admin-building" />
 <c:url var="buildingURL" value="admin-building" />
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -27,7 +27,7 @@
 				<div class="row">
 					<div class="col-xs-12">
 						<!--  star form -->
-						<form action="${buildingURL}" method="get">
+						<form action="${buildingURL}" method="get" id="formSubmit">
 							<!--  search box -->
 							<div class="widget-box table-filter">
 								<div class="widget-header">
@@ -184,7 +184,7 @@
 											<input type="hidden" name="action" value="LIST" />
 											<div class="form-group">
 												<div class="col-sm-6">
-													<button type="submit" class="btn btn-sm btn-success">
+													<button type="button" class="btn btn-sm btn-success" id="btnSearch">
 														Tìm kiếm <i
 															class="ace-icon fa fa-arrow-right icon-on-right bigger-110"></i>
 													</button>
@@ -195,6 +195,10 @@
 									</div>
 								</div>
 							</div>
+							<input type="hidden" value="" id="page" name="page" />
+							<input type="hidden" value="10" id="maxPageItem" name="maxPageItem"/>
+							<input type="hidden" value="" id="sortName" name="sortName" />
+							<input type="hidden" value="" id="sortBy" name="sortBy"/>
 						</form>
 						<!-- END form -->
 
@@ -240,7 +244,8 @@
 							<tbody>
 								<c:forEach var="item" items="${model.listResults}">
 									<tr>
-										<td><input type="checkbox" value="${item.id}" id="checkbox_${item.id}"></td>
+										<td><input type="checkbox" value="${item.id}"
+											id="checkbox_${item.id}"></td>
 										<td>${item.name}</td>
 										<td>${item.buildingArea}</td>
 										<td>${item.numberOfBasement}</td>
@@ -250,10 +255,10 @@
 										<td>${item.type}</td>
 										<td>${item.managerName}</td>
 										<td>${item.managerPhone}</td>
-										<td>
-											<a class="btn btn-xs btn-primary btn-edit"
-											data-toggle="tooltip" title='Cập nhật tòa nhà' href='<c:url value="/admin-building?action=EDIT&id=${item.id}" />'> 
-											<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+										<td><a class="btn btn-xs btn-primary btn-edit"
+											data-toggle="tooltip" title='Cập nhật tòa nhà'
+											href='<c:url value="/admin-building?action=EDIT&id=${item.id}" />'>
+												<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 										</a></td>
 									</tr>
 								</c:forEach>
@@ -261,34 +266,65 @@
 						</table>
 					</div>
 				</div>
+				<div class="container">
+					<ul class="pagination" id="pagination"></ul>
+				</div>
+
 			</div>
 		</div>
 	</div>
 	<!-- /.main-content -->
 	<script type="text/javascript">
-		$('#btnDelete').click(function name() {		
-			var dataArray = $('tbody input[type=checkbox]:checked').map(function () {
-				return $(this).val();
-			}).get();
-			var data = {};
-			data['ids'] = dataArray;
-			deleteBuilding(data);
+	
+		$('#btnSearch').click(function () {
+			$('#page').val(1);
+    		$('#formSubmit').submit(); 
 		});
 	
+		$('#btnDelete').click(
+				function name() {
+					var dataArray = $('tbody input[type=checkbox]:checked')
+							.map(function() {
+								return $(this).val();
+							}).get();
+					var data = {};
+					data['ids'] = dataArray;
+					deleteBuilding(data);
+		});
+
 		function deleteBuilding(data) {
-			$.ajax({
-				url : '${buildingAPI}',
-				data : JSON.stringify(data),
-				type : 'DELETE',
-				contentType : 'application/json',
-				success : function(data) {
-					window.location.href = "${buildingURL}?action=LIST&message=delete_success";
-				},
-				error : function() {
-					window.location.href = "${buildingURL}?action=LIST&message=error_system";
-				}
-			});
+			$
+					.ajax({
+						url : '${buildingAPI}',
+						data : JSON.stringify(data),
+						type : 'DELETE',
+						contentType : 'application/json',
+						success : function(data) {
+							window.location.href = "${buildingURL}?action=LIST&page=1&maxPageItem=10&message=delete_success";
+						},
+						error : function() {
+							window.location.href = "${buildingURL}?action=LIST&page=1&maxPageItem=10&message=error_system";
+						}
+					});
 		}
+		
+		var totalPage = ${model.totalPage};
+   		var currentPage = ${model.page};		
+		$(function () {
+	        window.pagObj = $('#pagination').twbsPagination({
+	            totalPages: totalPage,
+	            visiblePages: 5,
+	            startPage : currentPage,
+	            onPageClick: function (event, page) {
+	            	if(currentPage != page){
+	            		$('#page').val(page);
+	            		//$('#sortName').val('name');
+	            		//$('#sortBy').val('ASC');
+	            		$('#formSubmit').submit(); 
+	            	} 	               
+	            }
+	        });
+	    });
 	</script>
 </body>
 

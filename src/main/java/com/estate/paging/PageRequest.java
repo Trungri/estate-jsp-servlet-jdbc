@@ -18,6 +18,7 @@ public class PageRequest implements Pageble{
 		return page;
 	}
 
+	//phần tử đầu tiên bắt đầu của danh sách mà ta trả về ở csdl (20 item : page 1 star 0, page 2 star 10)
 	@Override
 	public Integer getOffset() {
 		if(page != null && maxPageItem != null) {
