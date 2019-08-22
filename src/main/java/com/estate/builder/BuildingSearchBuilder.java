@@ -12,7 +12,7 @@ public class BuildingSearchBuilder {
 	private String costRentTo;
 	private String areaRentFrom;
 	private String areaRentTo;
-	private String[] buildingTypes = new String[] {};
+	private String[] buildingTypes = new String[]{};
 
 	public String getName() {
 		return name;

@@ -12,9 +12,11 @@ public interface IBuildingService {
 	void update (BuildingDTO updateBuilding, long id);
 	void delete(Long[] ids);
 	List<BuildingDTO> findAll(BuildingSearchBuilder builder, Pageble pageble);
+	List<BuildingDTO> findAll(String url);
 	int getTotalItem(BuildingSearchBuilder builder);
+	int getTotalItem(String url);
 	BuildingDTO findById (long id);
-	
+	BuildingDTO findById (String url);
 	
 	BuildingDTO delete (Long id);
 	

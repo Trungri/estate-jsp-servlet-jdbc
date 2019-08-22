@@ -12,6 +12,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -23,6 +24,8 @@ import com.estate.paging.Sorter;
 import com.estate.repository.JpaRepository;
 
 public class AbstractJDBC<T> implements JpaRepository<T> {
+	
+	ResourceBundle resourceBundle = ResourceBundle.getBundle("application");
 
 	private Class<T> zClass;
 
@@ -35,10 +38,10 @@ public class AbstractJDBC<T> implements JpaRepository<T> {
 
 	private Connection getConnection() {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			String dbURL = "jdbc:mysql://localhost:3306/estate4month2019?useUnicode=true&characterEncoding=UTF-8";
-			String username = "root";
-			String password = "abc123";
+			Class.forName(resourceBundle.getString("jdbc.driverName"));
+			String dbURL = resourceBundle.getString("jdbc.url");
+			String username = resourceBundle.getString("jdbc.user");
+			String password = resourceBundle.getString("jdbc.password");
 			return DriverManager.getConnection(dbURL, username, password);
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();

@@ -273,6 +273,42 @@
 			</div>
 		</div>
 	</div>
+	
+	 <!-- Modal assignment-->
+      <!--
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Giao nhà cho nhân viên</h4>
+        </div>
+        <div class="modal-body">
+          <table class="table">
+		    <thead>
+		      <tr>
+		        <th>check</th>
+		        <th>Nhân viên</th>
+		      </tr>
+		    </thead>
+		    <tbody>
+		      <tr>
+		       <input type="checkbox" value="checked">
+		        <td>Doe</td>
+		      </tr>
+		      <tr>
+		        <input type="checkbox" value="">
+		        <td>Moe</td>
+		      </tr>
+    		</tbody>
+  		</table>
+
+        </div>
+        <div class="modal-footer">
+       	 <button type="button" class="btn btn-success">Save</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div> 
+      -->
+	
+	
 	<!-- /.main-content -->
 	<script type="text/javascript">
 	
@@ -287,25 +323,27 @@
 							.map(function() {
 								return $(this).val();
 							}).get();
-					var data = {};
-					data['ids'] = dataArray;
-					deleteBuilding(data);
+					//var data = {};
+					//data['ids'] = dataArray;
+					//deleteBuilding(data);
+					
+					deleteBuilding(dataArray);
 		});
 
 		function deleteBuilding(data) {
-			$
-					.ajax({
-						url : '${buildingAPI}',
-						data : JSON.stringify(data),
-						type : 'DELETE',
-						contentType : 'application/json',
-						success : function(data) {
-							window.location.href = "${buildingURL}?action=LIST&page=1&maxPageItem=10&message=delete_success";
-						},
-						error : function() {
-							window.location.href = "${buildingURL}?action=LIST&page=1&maxPageItem=10&message=error_system";
-						}
-					});
+			$.ajax({
+				//url : '${buildingAPI}',
+				url : 'http://localhost:8087/api/building',
+				data : JSON.stringify(data),
+				type : 'DELETE',
+				contentType : 'application/json',
+				success : function(data) {
+					window.location.href = "${buildingURL}?action=LIST&page=1&maxPageItem=10&message=delete_success";
+				},
+				error : function() {
+					window.location.href = "${buildingURL}?action=LIST&page=1&maxPageItem=10&message=error_system";
+				}
+			});
 		}
 		
 		var totalPage = ${model.totalPage};
